@@ -1,9 +1,8 @@
 package org.calculator.calc;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import org.calculator.reporting.ExtentTestNGListener;
+import org.calculator.util.CommandExecutor;
+import org.calculator.util.ExpressionValidator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,29 +10,22 @@ import lombok.extern.slf4j.Slf4j;
 public class BcCalculator implements Calculator {
 
     public String calculate(String expression) {
+        ExpressionValidator.validateExpression(expression);
+
         log.info("[BC] Calculating: {}", expression);
-        ProcessBuilder pb = new ProcessBuilder("bc", "-l");
-        Process process = null;
+        ExtentTestNGListener.logCalculationStep("[BC] Calculating: " + expression);
+        String cmd = String.format("echo '%s' | bc -l", expression);
+
         try {
-            process = pb.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (OutputStreamWriter writer = new OutputStreamWriter(process.getOutputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-
-            writer.write(expression + "\n");
-            writer.flush();
-            writer.close();
-
-            String result = reader.readLine();
-            process.waitFor();
-
+            // Use the CommandExecutor utility
+            String result = CommandExecutor.executeCommand(cmd);
             log.info("[BC] Result: {}", result);
-            return result != null ? result.trim() : "";
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            ExtentTestNGListener.logCalculationStep("[BC] Result:: " + result);
+            return result;
+        } catch (Exception e) {
+            Thread.currentThread().interrupt(); // Preserve interrupt status
+            log.error("[BC] Error while calculating '{}': {}", expression, e.getMessage(), e);
+            throw new RuntimeException("Error calculating expression in Bc", e);
         }
     }
 }

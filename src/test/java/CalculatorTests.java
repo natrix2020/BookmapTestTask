@@ -5,14 +5,17 @@ import org.calculator.calc.BcCalculator;
 import org.calculator.calc.Calculator;
 import org.calculator.data.CalcTestCaseRepository;
 import org.calculator.model.CalculatorTestModel;
+import org.calculator.reporting.ExtentTestNGListener;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Listeners({ExtentTestNGListener.class})
 @Slf4j
-public class BcCalculatorTests {
+public class CalculatorTests {
 
     @DataProvider(name = "testCases")
     public Object[][] getBcCases() {
@@ -24,7 +27,7 @@ public class BcCalculatorTests {
         return getDataProvider(CalcTestCaseRepository.getLimitEdgeCases());
     }
 
-    @Test(dataProvider = "testCases")
+    @Test(dataProvider = "testCases", description = "Test BC base scenarios")
     public void testBcCalculator(CalculatorTestModel testCase)  {
         Calculator calculator = new BcCalculator();
         log.info("Running test: {}", testCase.getExpression());
@@ -32,7 +35,7 @@ public class BcCalculatorTests {
         Assert.assertEquals(result, testCase.getExpected(), "Failed for: " + testCase.getExpression());
     }
 
-    @Test(dataProvider = "limitCases")
+    @Test(dataProvider = "limitCases", description = "Test BC limits")
     public void testBcLimits(CalculatorTestModel testCase) {
         try {
             Calculator calculator = new BcCalculator();
@@ -44,7 +47,7 @@ public class BcCalculatorTests {
         }
     }
 
-    @Test(dataProvider = "testCases")
+    @Test(dataProvider = "testCases", description = "Test Awk base scenarios")
     public void testAwkCalculator(CalculatorTestModel testCase) {
         Calculator calculator = new AwkCalculator();
         log.info("Running test: {}", testCase.getExpression());
@@ -52,7 +55,7 @@ public class BcCalculatorTests {
         Assert.assertEquals(result, testCase.getExpected(), "Failed for: " + testCase.getExpression());
     }
 
-    @Test(dataProvider = "limitCases")
+    @Test(dataProvider = "limitCases", description = "Test Awk limits")
     public void testAwkLimits(CalculatorTestModel testCase) {
         try {
             Calculator calculator = new AwkCalculator();
