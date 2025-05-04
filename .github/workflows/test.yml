@@ -52,6 +52,9 @@ jobs:
           path: pages
 
   deploy:
+    # Adding the environment for Pages deployment
+    environment:
+      name: github-pages
     # Permissions needed to write to GitHub Pages
     permissions:
       pages: write
