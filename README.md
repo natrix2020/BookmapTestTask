@@ -19,23 +19,18 @@ The project includes automated tasks to generate test reports and deploy them to
     - Make sure Git is installed to clone the repository.
 
 ### **Setup**
-1. Clone the repository:
-``` bash
-   git clone https://github.com/<username>/<repository-name>.git
-   cd <repository-name>
-```
-2. Or just download the zip.
+1. Download the zip.
 
-1. Build the project:
+2. Build the project:
 ``` bash
    ./gradlew build
 ```
 
-1. Run tests:
+3. Run tests:
 ``` bash
    ./gradlew clean test
 ```
-1. Check the generated **ExtentReport**:
+4. Check the generated **ExtentReport**:
     - The report will be located in the `test-output` directory:
 ``` 
      test-output/SparkReport.html
