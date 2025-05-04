@@ -35,9 +35,9 @@ jobs:
         run: ./gradlew clean test
 
       # Upload Extent Report as an artifact
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          name: ExtentReport
-          path: test-output/SparkReport.html
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
         if: always()
