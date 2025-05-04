@@ -21,16 +21,11 @@ The project includes automated tasks to generate test reports and deploy them to
 ### **Setup**
 1. Download the zip.
 
-2. Build the project:
-``` bash
-   ./gradlew build
-```
-
-3. Run tests:
+2. Run tests:
 ``` bash
    ./gradlew clean test
 ```
-4. Check the generated **ExtentReport**:
+3. Check the generated **ExtentReport**:
     - The report will be located in the `test-output` directory:
 ``` 
      test-output/SparkReport.html
