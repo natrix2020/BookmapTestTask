@@ -6,11 +6,13 @@ import org.calculator.model.CalcTestCases;
 import org.calculator.model.CalculationResult;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Listeners({org.calculator.reporting.ExtentTestNGListener.class})
 public class CalculatorTests {
 
     private Object[][] getDataProvider(List<CalcTestCases> cases) {

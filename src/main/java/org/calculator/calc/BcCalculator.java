@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.calculator.model.CalculationResult;
+import org.calculator.reporting.ExtentTestNGListener;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +24,7 @@ public class BcCalculator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        ExtentTestNGListener.logCalculationStep("[BC] Calculating: " + expression);
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
                 BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 BufferedReader stderrReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
@@ -32,12 +33,15 @@ public class BcCalculator {
             writer.flush();
             process.getOutputStream().close();
             List<String> stdout = stdoutReader.lines().collect(Collectors.toList());
+            ExtentTestNGListener.logCalculationStep("[bc] STDOUT: " + stdout);
             log.info("STDOUT: '{}'", stdout);
             String stderr = stderrReader.lines()
                     .filter(error -> error != null && !error.trim().isEmpty())
                     .findFirst()
                     .orElse("");
+
             log.info("STDERR: '{}'", stderr);
+            ExtentTestNGListener.logCalculationStep("[bc] STDERR: " + stderr);
             return new CalculationResult(stdout, stderr);
         } catch (IOException e) {
             throw new RuntimeException(e);
