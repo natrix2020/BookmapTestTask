@@ -2,38 +2,102 @@ package org.calculator.data;
 
 import java.util.List;
 
-import org.calculator.model.CalculatorTestModel;
+import org.calculator.model.CalcTestCases;
 
 public class CalcTestCaseRepository {
 
-    public static List<CalculatorTestModel> getBasicArithmeticCases() {
+    public static List<CalcTestCases> getValidExpressions() {
         return List.of(
-                CalculatorTestModel.builder().expression("1 + 2").expected("3").build(),
-                CalculatorTestModel.builder().expression("10 - 5").expected("5").build(),
-                CalculatorTestModel.builder().expression("4 * 3").expected("12").build(),
-                CalculatorTestModel.builder().expression("8 / 2").expected("4").build()
+                CalcTestCases.builder().expression("1 + 1").expectedStdout("2").expectedStderr("").build(),
+                CalcTestCases.builder().expression("4 + 2 * 3").expectedStdout("10").expectedStderr("").build(),
+                CalcTestCases.builder().expression("5.6 * 1.20 - 2").expectedStdout("4.72").expectedStderr("").build(),
+                CalcTestCases.builder().expression("scale=3; 0.14").expectedStdout(".14").expectedStderr("").build(),
+                CalcTestCases.builder().expression("scale=2; 5.0/-3").expectedStdout("-1.66").expectedStderr("").build(),
+                CalcTestCases.builder().expression(" - 0.89 ").expectedStdout("-.89").expectedStderr("").build(),
+                CalcTestCases.builder().expression("- - 3").expectedStdout("3").expectedStderr("").build(),
+                CalcTestCases.builder().expression("999999 * 999999").expectedStdout("999998000001").expectedStderr("").build(),
+                CalcTestCases.builder().expression("0011342349878977349729").expectedStdout("11342349878977349729").expectedStderr("").build(),
+                CalcTestCases.builder().expression("-234987379834 ").expectedStdout("-234987379834").expectedStderr("").build(),
+                CalcTestCases.builder().expression("5.0/-3").expectedStdout("-1").expectedStderr("").build()
         );
     }
 
-    public static List<CalculatorTestModel> getLimitEdgeCases() {
+    public static List<CalcTestCases> getSyntaxErrorsExpressions() {
         return List.of(
-                // Division by zero
-                CalculatorTestModel.builder().expression("1 / 0").expected("Runtime error").build(),
+                CalcTestCases.builder().expression("0x13").expectedStdout("").expectedStderr("Parse error: bad expression").build(),
+                CalcTestCases.builder().expression(" +17373497854789").expectedStdout("").expectedStderr("Parse error: bad token").build(),
+                CalcTestCases.builder().expression(" *924328793497843").expectedStdout("").expectedStderr("Parse error: bad token").build(),
+                CalcTestCases.builder().expression("/-8434379374").expectedStdout("").expectedStderr("Parse error: bad token").build(),
+                CalcTestCases.builder().expression("--3").expectedStdout("").expectedStderr("Parse error: bad token").build(),
+                CalcTestCases.builder().expression("3 +").expectedStdout("").expectedStderr("Parse error: bad expression").build(),
+                CalcTestCases.builder().expression("* 5").expectedStdout("").expectedStderr("Parse error: bad token").build(),
+                CalcTestCases.builder().expression(")").expectedStdout("").expectedStderr("Parse error: bad token").build(),
+                CalcTestCases.builder().expression("(").expectedStdout("").expectedStderr("Parse error: bad expression").build()
+        );
+    }
 
-                // Large numbers
-                CalculatorTestModel.builder().expression("123456789 * 987654321").expected("121932631112635269").build(),
+    public static List<CalcTestCases> getDivisionByZeroCases() {
+        return List.of(
+                CalcTestCases.builder().expression("1/0").expectedStdout("").expectedStderr("Math error: divide by 0").build(),
+                CalcTestCases.builder().expression("scale=2; 1/0").expectedStdout("").expectedStderr("Math error: divide by 0").build()
+        );
+    }
 
-                // Floating point division (bc returns more digits, awk returns 6-digit precision)
-                CalculatorTestModel.builder().expression("5 / 7").expected("0.71428571428571428571").build(),
+    public static List<CalcTestCases> getWarningExpressions() {
+        return List.of(
+                CalcTestCases.builder().expression("scale=-4; -0.4").expectedStdout("").expectedStderr("Math error: negative number").build()
+        );
+    }
 
-                // Zero multiplication
-                CalculatorTestModel.builder().expression("0 * 9999").expected("0").build(),
+    public static List<CalcTestCases> getWhitespaceExpressions() {
+        return List.of(
+                CalcTestCases.builder().expression("  12    +     3  ").expectedStdout("15").expectedStderr("").build(),
+                CalcTestCases.builder().expression("scale = 2 ;  7.0000 * 1.0").expectedStdout("7.0000").expectedStderr("").build(),
+                CalcTestCases.builder().expression("\n5 + 6\n").expectedStdout("11").expectedStderr("").build(),
+                CalcTestCases.builder().expression("    100 - 50").expectedStdout("50").expectedStderr("").build()
+        );
+    }
 
-                // Negative numbers
-                CalculatorTestModel.builder().expression("-5 + -3").expected("-8").build(),
+    public static List<CalcTestCases> getVariableExpressions() {
+        return List.of(
+                CalcTestCases.builder().expression("a=5; a+3").expectedStdout("8").expectedStderr("").build(),
+                CalcTestCases.builder().expression("x=10;y=3;x*y").expectedStdout("30").expectedStderr("").build(),
+                CalcTestCases.builder().expression("n=7;scale=3;n/2").expectedStdout("3.500").expectedStderr("").build()
+        );
+    }
 
-                // Expression with parentheses
-                CalculatorTestModel.builder().expression("(2 + 3) * 4").expected("20").build()
+    public static List<CalcTestCases> getMultipleExpressions() {
+        return List.of(
+                CalcTestCases.builder().expression("1+2; 3+4").expectedStdouts(List.of("3", "7")).expectedStderr("").build(),
+                CalcTestCases.builder().expression("scale=2; 5/2; 6/4").expectedStdouts(List.of("2.50", "1.50")).expectedStderr("").build()
+        );
+    }
+
+    public static List<CalcTestCases> getLargeNumberExpressions() {
+        return List.of(
+                CalcTestCases.builder().expression("999999999999999999 + 1").expectedStdout("1000000000000000000").expectedStderr("").build(),
+                CalcTestCases.builder().expression("-999999999999999999 * 1").expectedStdout("-999999999999999999").expectedStderr("").build(),
+                CalcTestCases.builder().expression("1e3 + 1").expectedStdout("1001").expectedStderr("").build()
+        );
+    }
+
+    public static List<CalcTestCases> getInvalidVariableCases() {
+        return List.of(
+                CalcTestCases.builder().expression("foo+").expectedStdout("").expectedStderr("Parse error: bad expression").build()
+        );
+    }
+
+    public static List<CalcTestCases> getRoundingCases() {
+        return List.of(
+                CalcTestCases.builder().expression("scale=1; 10/3").expectedStdout("3.3").expectedStderr("").build(),
+                CalcTestCases.builder().expression("scale=0; 10/3").expectedStdout("3").expectedStderr("").build()
+        );
+    }
+
+    public static List<CalcTestCases> getNestedExpressionCases() {
+        return List.of(
+                CalcTestCases.builder().expression("((3 + 2)").expectedStdout("").expectedStderr("Parse error: bad expression").build(),
+                CalcTestCases.builder().expression("3 + (2 * 4)").expectedStdout("11").expectedStderr("").build()
         );
     }
 }
