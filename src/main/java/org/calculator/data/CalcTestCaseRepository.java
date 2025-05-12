@@ -24,28 +24,28 @@ public class CalcTestCaseRepository {
 
     public static List<CalcTestCases> getSyntaxErrorsExpressions() {
         return List.of(
-                CalcTestCases.builder().expression("0x13").expectedStdout("").expectedStderr("Parse error: bad expression").build(),
-                CalcTestCases.builder().expression(" +17373497854789").expectedStdout("").expectedStderr("Parse error: bad token").build(),
-                CalcTestCases.builder().expression(" *924328793497843").expectedStdout("").expectedStderr("Parse error: bad token").build(),
-                CalcTestCases.builder().expression("/-8434379374").expectedStdout("").expectedStderr("Parse error: bad token").build(),
-                CalcTestCases.builder().expression("--3").expectedStdout("").expectedStderr("Parse error: bad token").build(),
-                CalcTestCases.builder().expression("3 +").expectedStdout("").expectedStderr("Parse error: bad expression").build(),
-                CalcTestCases.builder().expression("* 5").expectedStdout("").expectedStderr("Parse error: bad token").build(),
-                CalcTestCases.builder().expression(")").expectedStdout("").expectedStderr("Parse error: bad token").build(),
-                CalcTestCases.builder().expression("(").expectedStdout("").expectedStderr("Parse error: bad expression").build()
+                CalcTestCases.builder().expression("0x13").expectedStdout("").expectedStderr("(standard_in) 2: syntax error").build(),
+                CalcTestCases.builder().expression(" +17373497854789").expectedStdout("").expectedStderr("standard_in) 1: syntax error").build(),
+                CalcTestCases.builder().expression(" *924328793497843").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
+                CalcTestCases.builder().expression("/-8434379374").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
+                CalcTestCases.builder().expression("--3").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
+                CalcTestCases.builder().expression("3 +").expectedStdout("").expectedStderr("(standard_in) 2: syntax error").build(),
+                CalcTestCases.builder().expression("* 5").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
+                CalcTestCases.builder().expression(")").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
+                CalcTestCases.builder().expression("(").expectedStdout("").expectedStderr("(standard_in) 2: syntax error").build()
         );
     }
 
     public static List<CalcTestCases> getDivisionByZeroCases() {
         return List.of(
-                CalcTestCases.builder().expression("1/0").expectedStdout("").expectedStderr("Math error: divide by 0").build(),
-                CalcTestCases.builder().expression("scale=2; 1/0").expectedStdout("").expectedStderr("Math error: divide by 0").build()
+                CalcTestCases.builder().expression("1/0").expectedStdout("").expectedStderr("Runtime error (func=(main), adr=9): Divide by zero").build(),
+                CalcTestCases.builder().expression("scale=2; 1/0").expectedStdout("").expectedStderr("Runtime error (func=(main), adr=9): Divide by zero").build()
         );
     }
 
     public static List<CalcTestCases> getWarningExpressions() {
         return List.of(
-                CalcTestCases.builder().expression("scale=-4; -0.4").expectedStdout("").expectedStderr("Math error: negative number").build()
+                CalcTestCases.builder().expression("scale=-4; -0.4").expectedStdout("-.4").expectedStderr("Runtime warning (func=(main), adr=6): negative scale, set to 0").build()
         );
     }
 
@@ -83,7 +83,7 @@ public class CalcTestCaseRepository {
 
     public static List<CalcTestCases> getInvalidVariableCases() {
         return List.of(
-                CalcTestCases.builder().expression("foo+").expectedStdout("").expectedStderr("Parse error: bad expression").build()
+                CalcTestCases.builder().expression("foo+").expectedStdout("").expectedStderr("(standard_in) 2: syntax error").build()
         );
     }
 
@@ -96,7 +96,7 @@ public class CalcTestCaseRepository {
 
     public static List<CalcTestCases> getNestedExpressionCases() {
         return List.of(
-                CalcTestCases.builder().expression("((3 + 2)").expectedStdout("").expectedStderr("Parse error: bad expression").build(),
+                CalcTestCases.builder().expression("((3 + 2)").expectedStdout("").expectedStderr("(standard_in) 2: syntax error").build(),
                 CalcTestCases.builder().expression("3 + (2 * 4)").expectedStdout("11").expectedStderr("").build()
         );
     }
