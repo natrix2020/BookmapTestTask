@@ -24,8 +24,8 @@ public class CalcTestCaseRepository {
 
     public static List<CalcTestCases> getSyntaxErrorsExpressions() {
         return List.of(
-                CalcTestCases.builder().expression("0x13").expectedStdout("").expectedStderr("(standard_in) 2: syntax error").build(),
-                CalcTestCases.builder().expression(" +17373497854789").expectedStdout("").expectedStderr("standard_in) 1: syntax error").build(),
+                CalcTestCases.builder().expression("0x13").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
+                CalcTestCases.builder().expression(" +17373497854789").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
                 CalcTestCases.builder().expression(" *924328793497843").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
                 CalcTestCases.builder().expression("/-8434379374").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
                 CalcTestCases.builder().expression("--3").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build(),
@@ -38,7 +38,7 @@ public class CalcTestCaseRepository {
 
     public static List<CalcTestCases> getDivisionByZeroCases() {
         return List.of(
-                CalcTestCases.builder().expression("1/0").expectedStdout("").expectedStderr("Runtime error (func=(main), adr=9): Divide by zero").build(),
+                CalcTestCases.builder().expression("1/0").expectedStdout("").expectedStderr("Runtime error (func=(main), adr=3): Divide by zero").build(),
                 CalcTestCases.builder().expression("scale=2; 1/0").expectedStdout("").expectedStderr("Runtime error (func=(main), adr=9): Divide by zero").build()
         );
     }
@@ -77,7 +77,7 @@ public class CalcTestCaseRepository {
         return List.of(
                 CalcTestCases.builder().expression("999999999999999999 + 1").expectedStdout("1000000000000000000").expectedStderr("").build(),
                 CalcTestCases.builder().expression("-999999999999999999 * 1").expectedStdout("-999999999999999999").expectedStderr("").build(),
-                CalcTestCases.builder().expression("1e3 + 1").expectedStdout("1001").expectedStderr("").build()
+                CalcTestCases.builder().expression("1e3 + 1").expectedStdout("").expectedStderr("(standard_in) 1: syntax error").build()
         );
     }
 
